@@ -1,12 +1,13 @@
 """Filesystem backend for the papr deep agent.
 
 The per-user store is papr's single source of truth. Each persistent top-level
-folder (papers, notes, topics, skills, briefs) routes to its own StoreBackend
-namespace; everything else (agent scratch: todos, offloaded tool results) stays
-ephemeral in thread state.
+folder (papers, topics, skills, briefs) routes to its own StoreBackend namespace;
+everything else (agent scratch: todos, offloaded tool results) stays ephemeral in
+thread state. `/papers/` is the user's whole research workspace — papers AND notes
+live there together, organized however they like (nested subfolders welcome).
 
 Why a namespace *per folder*: CompositeBackend strips the matched route prefix
-before delegating, so a single shared StoreBackend would map /notes/x.md and
+before delegating, so a single shared StoreBackend would map /papers/x.md and
 /topics/x.md to the same key ("/x.md") and collide. Per-folder namespaces keep
 them apart and make the store easy to browse: (user_id, "papr", folder).
 
@@ -20,7 +21,8 @@ from typing import Any, Callable
 from deepagents.backends import CompositeBackend, StateBackend, StoreBackend
 
 # Persistent top-level folders, each isolated in its own store namespace.
-PERSISTENT_FOLDERS: tuple[str, ...] = ("papers", "notes", "topics", "skills", "briefs")
+# /papers/ holds both papers and notes (the user's research workspace).
+PERSISTENT_FOLDERS: tuple[str, ...] = ("papers", "topics", "skills", "briefs")
 
 # Used when no authenticated user is present (local `langgraph dev` runs).
 _DEV_USER = "local-dev"

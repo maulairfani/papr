@@ -14,7 +14,7 @@ summarize them, but guide, take notes, and track topics the user is following ov
 
 **Status:** In development. Steps 0–6 done — agent + per-user store; the web stack (React SPA,
 FastAPI BFF, agent) in Docker with auth → chat → files and per-user isolation; paper ingestion
-(upload plus a built-in arXiv fetch tool); store-backed, user-creatable skills (native
+(upload plus built-in arXiv `search_arxiv` + `download_arxiv` tools); store-backed, user-creatable skills (native
 progressive disclosure); topics + a native-cron **daily brief** (subscribe creates a per-user
 cron carrying `user_id` in run context; "generate now" fires the same trigger immediately);
 and a dedicated **MCP server** (FastMCP) exposing each user's store to external clients via a
@@ -106,14 +106,14 @@ with no extra logic.
 
 ## Still open (don't re-litigate without revisiting)
 
-1. **Paper source for daily brief** — MVP ships **arXiv only** (reuses `fetch_arxiv`). Multi-source
+1. **Paper source for daily brief** — MVP ships **arXiv only** (reuses `search_arxiv`). Multi-source
    (Semantic Scholar/OpenAlex) is a later enhancement, not blocking.
 2. **Auth specifics** — MVP MCP auth is a **per-user PAT** (HS256 JWT with `aud=papr-mcp`/`iss=papr`,
    minted at `POST /mcp/token`, shared `PAPR_JWT_SECRET` between api+mcp); OAuth 2.1 later. Web auth
    is still the dev JWT — pick a real provider at deploy (Step 7).
-3. **Email delivery for the brief** — `send_email` is a best-effort SMTP tool; sends only when
-   `SMTP_*` env is set, otherwise reports "not configured" (the `/briefs/` file is the real artifact).
-   Pick a provider/credentials at deploy.
+3. **Email delivery for the brief** — deferred; no email tool currently (the `send_email` tool was
+   removed). The `/briefs/<date>.md` file is the deliverable. Revisit a delivery channel (email or
+   other) later.
 
 *(Resolved during build: `skills=` resolves through the StoreBackend; a cron carries `user_id` via
 `context=`; the built-in `/mcp` can't browse files so we run a dedicated FastMCP server.)*
