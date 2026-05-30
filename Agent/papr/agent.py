@@ -35,6 +35,7 @@ from .context import PaprContext
 from .middleware import PapersFileTypeMiddleware, inject_current_date
 from .prompts import SYSTEM_PROMPT
 from .tools.arxiv import download_arxiv, search_arxiv
+from .tools.files import delete_file, move_file
 
 # Persistent top-level folders, each isolated in its own store namespace.
 # /papers/ holds both papers and notes (the user's research workspace);
@@ -85,7 +86,7 @@ def build_agent(store=None):
     return create_deep_agent(
         model=PAPR_MODEL,
         system_prompt=SYSTEM_PROMPT,
-        tools=[search_arxiv, download_arxiv],
+        tools=[search_arxiv, download_arxiv, delete_file, move_file],
         backend=make_backend(),
         context_schema=PaprContext,
         # Enforce the /papers/ workspace rule (.md/.pdf only); inject today's date
