@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* papr design tokens (dark by default). Tailwind v4 reads these from @theme, so
+   utilities like `bg-surface` / `text-ink` / `text-brand` are generated from them.
+   Swap these values to add a light theme later. */
+@theme {
+  --color-ink: #d4d4d4; /* primary text */
+  --color-muted: #8b8b8b; /* secondary text */
+  --color-surface: #252526; /* panels: sidebar, chat */
+  --color-canvas: #1e1e1e; /* editor/viewer background */
+  --color-border: #333333;
+  --color-brand: #6366f1;
+  --color-brand-fg: #ffffff;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  color-scheme: dark; /* native scrollbars / form controls render dark */
+}
