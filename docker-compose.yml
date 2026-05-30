@@ -1,0 +1,58 @@
+# Local development stack for papr. Each service has its own dev Dockerfile.
+# Production (LangSmith Deployment + Postgres/Redis) is a later roadmap step.
+services:
+  # papr deep agent on the local LangGraph Agent Server.
+  agent:
+    build: ./Agent
+    env_file: ./Agent/.env
+    ports:
+      - "2024:2024"
+    volumes:
+      # Mount source for hot reload. (Skills now live in the per-user store.)
+      - ./Agent:/app
+
+  # FastAPI backend-for-frontend.
+  api:
+    build: ./Api
+    env_file: ./Api/.env
+    environment:
+      - AGENT_URL=http://agent:2024
+      # Shared with the mcp service so PATs minted here verify there.
+      - PAPR_JWT_SECRET=${PAPR_JWT_SECRET:-dev-insecure-secret-change-me}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./Api:/app
+      # Starter skills, seeded into a user's store on first login (read-only).
+      - ./Skills:/app/seed-skills:ro
+    depends_on:
+      - agent
+
+  # MCP server — exposes each user's store to external MCP clients (Claude
+  # Desktop, Cursor) via a per-user PAT verified with the shared secret.
+  mcp:
+    build: ./Mcp
+    environment:
+      - AGENT_URL=http://agent:2024
+      - PAPR_JWT_SECRET=${PAPR_JWT_SECRET:-dev-insecure-secret-change-me}
+    ports:
+      # Host 9100 (9000 is taken by another local project); container stays 9000.
+      - "9100:9000"
+    volumes:
+      - ./Mcp:/app
+    depends_on:
+      - agent
+
+  # React + Vite single-page app.
+  web:
+    build: ./Web
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./Web:/app
+      # Anonymous volume keeps the container's node_modules from being shadowed.
+      - /app/node_modules
+    depends_on:
+      - api

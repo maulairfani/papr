@@ -1,0 +1,23 @@
+[project]
+name = "papr-mcp"
+version = "0.0.1"
+description = "papr MCP server — exposes a user's papr store to external MCP clients."
+requires-python = ">=3.11"
+dependencies = [
+    # MCP server framework (streamable HTTP + JWT bearer auth). Pin to v2 for the
+    # documented JWTVerifier / get_access_token API.
+    "fastmcp>=2.11,<3",
+    # Reads the per-user store from the Agent Server.
+    "langgraph-sdk",
+    # Load Mcp/.env for local runs.
+    "python-dotenv>=1.0",
+    # ASGI server for the streamable-HTTP app.
+    "uvicorn[standard]>=0.29",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]

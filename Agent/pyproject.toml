@@ -1,0 +1,25 @@
+[project]
+name = "papr-agent"
+version = "0.0.1"
+description = "papr deep agent (deepagents) — the reasoning core of papr."
+requires-python = ">=3.11"
+dependencies = [
+    # deepagents >= 0.5.2 passes a LangGraph Runtime to namespace factories,
+    # which is how we read `user_id` from run context (see papr/backend.py).
+    "deepagents>=0.5.2",
+    # OpenAI provider for the default papr model.
+    "langchain[openai]",
+    # arXiv fetch tool (MVP paper source).
+    "arxiv>=2.1",
+]
+
+[project.optional-dependencies]
+# `langgraph dev` runs the local Agent Server during development.
+dev = ["langgraph-cli[inmem]"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["papr*"]

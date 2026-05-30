@@ -1,0 +1,8 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "papr": "papr.agent:agent"
+  },
+  "env": ".env",
+  "python_version": "3.12"
+}

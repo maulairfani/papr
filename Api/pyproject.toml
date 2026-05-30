@@ -1,0 +1,24 @@
+[project]
+name = "papr-api"
+version = "0.0.1"
+description = "papr API — FastAPI backend-for-frontend bridging the web app and the agent."
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+    # Talks to the LangGraph Agent Server (runs, store reads, cron lifecycle).
+    "langgraph-sdk",
+    # Dev auth: mint/verify the per-user token carrying user_id.
+    "pyjwt>=2.9",
+    # Load Api/.env (AGENT_URL, JWT secret) for local runs.
+    "python-dotenv>=1.0",
+    # Multipart parsing for file uploads.
+    "python-multipart>=0.0.9",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
