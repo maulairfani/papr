@@ -5,7 +5,7 @@ description = "papr deep agent (deepagents) — the reasoning core of papr."
 requires-python = ">=3.11"
 dependencies = [
     # deepagents >= 0.5.2 passes a LangGraph Runtime to namespace factories,
-    # which is how we read `user_id` from run context (see papr/backend.py).
+    # which is how we read `user_id` from run context (see papr/agent.py).
     "deepagents>=0.5.2",
     # OpenAI provider for the default papr model.
     "langchain[openai]",

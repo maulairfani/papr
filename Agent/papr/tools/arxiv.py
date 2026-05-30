@@ -17,8 +17,6 @@ import httpx
 from langchain_core.tools import tool
 from langgraph.runtime import get_runtime
 
-from ..backend import _user_id
-
 # Matches a bare new-style arXiv id like "1706.03762" or "2310.06825v2".
 _ARXIV_ID = re.compile(r"^\d{4}\.\d{4,5}(v\d+)?$")
 
@@ -100,6 +98,10 @@ async def download_arxiv(arxiv_id: str) -> str:
     store = getattr(rt, "store", None)
     if store is None:
         return "No store is available to save the paper."
+    # Lazy import: papr.agent imports this module, so importing it at top level
+    # would create a cycle. By call time the agent module is fully loaded.
+    from ..agent import _user_id
+
     user_id = _user_id(rt)
 
     url = f"https://arxiv.org/pdf/{aid}.pdf"
