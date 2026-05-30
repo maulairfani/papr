@@ -16,7 +16,7 @@ read*: a few new papers, one line each — not an essay, a playbook, or a checkl
   after the slug, a file named by today's UTC date.
 
 ## How to generate
-1. Call `current_date` for today's UTC date (`YYYY-MM-DD`).
+1. Take today's UTC date (`YYYY-MM-DD`) from your system prompt — it dates each brief file.
 2. List `/briefs/specs/` and read every spec.
 3. For each spec (slug = filename without `.md`):
    1. Derive an arXiv query from the spec and call `search_arxiv` (search only —

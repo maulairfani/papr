@@ -32,10 +32,9 @@ from deepagents.backends import CompositeBackend, StateBackend, StoreBackend
 
 from .config import PAPR_MODEL
 from .context import PaprContext
-from .middleware import PapersFileTypeMiddleware
+from .middleware import PapersFileTypeMiddleware, inject_current_date
 from .prompts import SYSTEM_PROMPT
 from .tools.arxiv import download_arxiv, search_arxiv
-from .tools.brief import current_date
 
 # Persistent top-level folders, each isolated in its own store namespace.
 # /papers/ holds both papers and notes (the user's research workspace);
@@ -86,11 +85,12 @@ def build_agent(store=None):
     return create_deep_agent(
         model=PAPR_MODEL,
         system_prompt=SYSTEM_PROMPT,
-        tools=[search_arxiv, download_arxiv, current_date],
+        tools=[search_arxiv, download_arxiv],
         backend=make_backend(),
         context_schema=PaprContext,
-        # Enforce the /papers/ workspace rule (only .md and .pdf) on papr's writes.
-        middleware=[PapersFileTypeMiddleware()],
+        # Enforce the /papers/ workspace rule (.md/.pdf only); inject today's date
+        # into the system prompt so papr knows "today" without a tool round-trip.
+        middleware=[PapersFileTypeMiddleware(), inject_current_date],
         # Skills live in the per-user store; the SkillsMiddleware loads them
         # through our CompositeBackend's /skills/ route (progressive disclosure).
         skills=["/skills/"],
