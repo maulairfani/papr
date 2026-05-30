@@ -1,7 +1,5 @@
-# Local development stack for papr.
-# Api (FastAPI BFF) and Web (React SPA) are being rebuilt from scratch — their
-# services will be re-added here as they come back. The MCP server is shelved for
-# later. Until then the agent runs standalone.
+# Local development stack for papr. The MCP server is shelved for later; the React
+# SPA runs via `npm run dev` for now (added here once it stabilizes).
 services:
   # papr deep agent on the local LangGraph Agent Server.
   agent:
@@ -12,3 +10,19 @@ services:
     volumes:
       # Mount source for hot reload. (Skills now live in the per-user store.)
       - ./Agent:/app
+
+  # FastAPI backend-for-frontend — a stateless adapter over the agent's per-user
+  # store. No database of its own: all data lives in the LangGraph store. Starter
+  # seed content lives in Api/seed-skills and Api/seed-memory (shipped in the image,
+  # seeded into a new user's store on first login).
+  api:
+    build: ./Api
+    environment:
+      - AGENT_URL=http://agent:2024
+      - PAPR_JWT_SECRET=${PAPR_JWT_SECRET:-dev-insecure-secret-change-me}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./Api:/app
+    depends_on:
+      - agent
