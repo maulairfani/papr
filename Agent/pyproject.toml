@@ -1,6 +1,6 @@
 [project]
 name = "papr-agent"
-version = "0.0.1"
+version = "0.1.0"
 description = "papr deep agent (deepagents) — the reasoning core of papr."
 requires-python = ">=3.11"
 dependencies = [

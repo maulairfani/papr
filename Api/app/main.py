@@ -15,7 +15,7 @@ from .services.errors import Invalid, NotFound
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="papr API", version="0.0.1")
+    app = FastAPI(title="papr API", version="0.1.0")
 
     app.add_middleware(
         CORSMiddleware,
