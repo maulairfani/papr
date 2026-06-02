@@ -1,0 +1,35 @@
+# Dependabot — grouped, monthly dependency + security update PRs (low noise).
+# Each ecosystem gets ONE grouped PR per cycle instead of one PR per package.
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /Agent
+    schedule:
+      interval: monthly
+    groups:
+      agent:
+        patterns: ["*"]
+
+  - package-ecosystem: pip
+    directory: /Api
+    schedule:
+      interval: monthly
+    groups:
+      api:
+        patterns: ["*"]
+
+  - package-ecosystem: npm
+    directory: /Web
+    schedule:
+      interval: monthly
+    groups:
+      web:
+        patterns: ["*"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]

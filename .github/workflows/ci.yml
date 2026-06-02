@@ -43,7 +43,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install ./Agent
+      - run: pip install -e ./Agent
       - name: import check
         env:
           OPENAI_API_KEY: ci-dummy-key
