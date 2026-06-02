@@ -57,6 +57,19 @@ docker compose exec agent python -c "from papr.agent import agent"
 3. Open a PR describing **what** and **why**; link any related issue.
 4. CI must pass and at least one maintainer review is required.
 
+## Releasing
+
+papr uses [Semantic Versioning](https://semver.org/) with a single repo-level
+version (one version for the whole app). While pre-1.0, a minor release may
+include breaking changes.
+
+To cut a release:
+
+1. In a PR, bump the version in `Agent/pyproject.toml`, `Web/package.json`, and
+   `Api/app/main.py` (`FastAPI(version=...)`).
+2. After it merges, tag `main` and push: `git tag vX.Y.Z && git push origin vX.Y.Z`.
+3. Create a GitHub Release for the tag with notes (auto-generated from commits is fine).
+
 ## Reporting bugs / requesting features
 
 Use the issue templates. For security vulnerabilities, please **do not** open a
